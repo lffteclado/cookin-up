@@ -2,29 +2,61 @@
 import SelecionarIngredientes from './SelecionarIngredientes.vue';
 import Tag from './Tag.vue';
 import SuaLista from './SuaLista.vue';
+import MostrarReceitas from './MostrarReceitas.vue';
+
+type Pagina = 'SelecionarIngredientes' | 'MostrarReceitas';
 
 export default {
   data() {
     return {
-      ingredientes: [] as string[]
+      ingredientes: [] as string[],
+      conteudo: 'SelecionarIngredientes' as Pagina
     };
   },
-  components: { SelecionarIngredientes, Tag, SuaLista },
+  components: { SelecionarIngredientes, Tag, SuaLista, MostrarReceitas },
   methods: {
     adicionarIngrediente(ingrediente: string) {
       this.ingredientes.push(ingrediente);
     },
     removerIngrediente(ingrediente: string) {
       this.ingredientes = this.ingredientes.filter(i => i !== ingrediente);
+    },
+    navegar(pagina: Pagina) {
+      this.conteudo = pagina
     }
   }
 }
 </script>
+<!-- <script setup lang="ts">
+import { ref } from 'vue';
+import SelecionarIngredientes from './SelecionarIngredientes.vue';
+import SuaLista from './SuaLista.vue';
+import MostrarReceitas from './MostrarReceitas.vue';
+
+type Pagina = 'SelecionarIngredientes' | 'MostrarReceitas';
+
+const ingredientes = ref<string[]>([]);
+let conteudo = 'SelecionarIngredientes' as Pagina;
+
+function adicionarIngrediente(ingrediente: string) {
+  ingredientes.value.push(ingrediente)
+}
+function removerIngrediente(ingrediente: string) {
+  ingredientes.value = ingredientes.value.filter(iLista => ingrediente !== iLista);
+}
+function alterarConteudo(conteudo: Pagina) {
+  console.log('alterarConteudo', conteudo)
+  conteudo = conteudo
+}
+</script> -->
 
 <template>
   <main class="conteudo-principal">
-    <SuaLista :ingredientes="ingredientes"/>
-    <SelecionarIngredientes @adicionar-ingrediente="adicionarIngrediente($event)" @remover-ingrediente="removerIngrediente($event)" />
+    <SuaLista :ingredientes="ingredientes" />
+    <SelecionarIngredientes v-if="conteudo === 'SelecionarIngredientes'"
+      @adicionar-ingrediente="adicionarIngrediente($event)" @remover-ingrediente="removerIngrediente($event)"
+      @buscar-receitas="navegar('MostrarReceitas')" />
+    <MostrarReceitas v-else-if="conteudo === 'MostrarReceitas'" />
   </main>
 </template>
 
