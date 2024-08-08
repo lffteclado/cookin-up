@@ -20,5 +20,5 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Run Ambiente Dev
-      run: npm run dev
+    - name: Run Build
+      run: npm run build
